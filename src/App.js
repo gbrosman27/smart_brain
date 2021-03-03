@@ -4,7 +4,7 @@ import Logo from './components/Logo/logo';
 import Rank from './components/Rank/rank';
 import ImageLinkForm from './components/ImageLinkForm/imagelinkform';
 import Particles from 'react-particles-js';
-// import Clarifai from 'react-clarifai-js';
+import Clarifai from 'clarifai';
 import FaceRecognition from './components/FaceRecognition/facerecognition';
 import './App.css';
 
@@ -23,6 +23,12 @@ const particlesOptions = {
 }
 
 
+// Define API key for Clarifai.
+const app = new Clarifai.App({
+  apiKey: "210d2a156ea6429681382204606643d7",
+});
+
+
 class App extends Component {
   constructor(){
     super();
@@ -32,17 +38,18 @@ class App extends Component {
     }
   }
 
+
   // Input to the imagelinkform.
   onInputChange = (event) => {
-    console.log(event.target.value);
+    this.setState({input: event.target.value});
   }
+
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
-    console.log('click');
-    app.models.predict(Clarifai.COLOR_MODEL, "https://samples.clarifai.com/face-det.jpg")
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
     .then(function(response) {
-        console.log(response);
+        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
       },
       function(err) {
         console.log(err);
