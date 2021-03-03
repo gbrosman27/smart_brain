@@ -4,6 +4,8 @@ import Logo from './components/Logo/logo';
 import Rank from './components/Rank/rank';
 import ImageLinkForm from './components/ImageLinkForm/imagelinkform';
 import Particles from 'react-particles-js';
+// import Clarifai from 'react-clarifai-js';
+import FaceRecognition from './components/FaceRecognition/facerecognition';
 import './App.css';
 
 
@@ -26,6 +28,7 @@ class App extends Component {
     super();
     this.state = {
       input: '',
+      imageUrl: ''
     }
   }
 
@@ -35,15 +38,16 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
+    this.setState({imageUrl: this.state.input});
     console.log('click');
-  //   app.models.predict("210d2a156ea6429681382204606643d7", "https://samples.clarifai.com/face-det.jpg").then(
-  //     function(response) {
-  //       //do something
-  //     },
-  //     function(err) {
-  //       //error
-  //     }
-  //   );
+    app.models.predict(Clarifai.COLOR_MODEL, "https://samples.clarifai.com/face-det.jpg")
+    .then(function(response) {
+        console.log(response);
+      },
+      function(err) {
+        console.log(err);
+      }
+    );
   }
 
 
@@ -55,7 +59,7 @@ class App extends Component {
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange={ this.onInputChange } onButtonSubmit={ this.onButtonSubmit } />      
-        {/*<FaceRecognition />*/}
+        <FaceRecognition imageUrl={this.state.imageUrl} />
       </div>
     );
   }
