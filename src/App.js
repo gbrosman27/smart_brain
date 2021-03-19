@@ -77,6 +77,7 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
+  // Route changes between home, sign in, register, and sign out.
   onRouteChange = (route) => {
     this.setState({route: route});
   }
