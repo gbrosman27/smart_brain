@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Navigation from './components/Navigation/navigation';
 import SignIn from './components/SignIn/signin';
+import Register from './components/Register/register';
 import Logo from './components/Logo/logo';
 import Rank from './components/Rank/rank';
 import ImageLinkForm from './components/ImageLinkForm/imagelinkform';
@@ -76,21 +77,28 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
+  onRouteChange = (route) => {
+    this.setState({route: route});
+  }
 
   render() {
     return (
       <div className="App">
         <Particles className='particles' params={ particlesOptions } />
-        <Navigation />
+        <Navigation onRouteChange={this.onRouteChange} />
         {/* if this.state.route === signin is true, return signin component, else return everything in the div */}
-        { this.state.route === 'signin' ?
-          <SignIn /> :
+        { this.state.route === 'home' ?
           <div>
             <Logo />
             <Rank />
             <ImageLinkForm onInputChange={ this.onInputChange } onButtonSubmit={ this.onButtonSubmit } />      
-            <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+            <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} /> 
           </div>
+          : (
+            this.state.route === 'signin' ?
+            <SignIn onRouteChange={this.onRouteChange}/> :
+            <Register onRouteChange={this.onRouteChange} />
+            )          
         }
       </div>
     );
